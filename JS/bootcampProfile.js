@@ -20,3 +20,6 @@ let studentProfile = {
     skill : ["HTML","JS","CSS"],
     homeTown
 }
+
+
+console.log(typeof studentProfile)
