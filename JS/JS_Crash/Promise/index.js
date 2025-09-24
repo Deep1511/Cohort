@@ -66,7 +66,7 @@ async function doTask(){
     try {
         const fileContent = await readFileWithPromise('./hello.txt','utf-8')
     await writeFileWithPromise('backup.txt',fileContent)
-    await wait(10)
+    // await wait(10)
     await unlinkWithPromise('.hello.txt')
     } catch (error) {
         console.log("Error", error)
