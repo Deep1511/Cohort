@@ -1,0 +1,59 @@
+import { Router } from "express";
+import {
+  changeCurrentPassword,
+  forgotPasswordRequest,
+  loginUser,
+  logoutUser,
+  refreshAccessToken,
+  registerUser,
+  resendEmailVerification,
+  resetForgottenPassword,
+  verifyEmail,
+} from "../controllers/auth.controllers.js";
+import { validate } from "../middlewares/validator.middleware.js";
+import {
+  userChangeCurrentPasswordValidator,
+  userForgotPasswordValidator,
+  userLoginValidator,
+  userRegistrationValidation,
+  userResetForgottenPasswordValidator,
+} from "../validators/index.js";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
+
+const router = Router();
+
+router
+  .route("/register")
+  .post(userRegistrationValidation(), validate, registerUser);
+
+router.route("/verify-email/:verificationToken").get(verifyEmail);
+router.route("/login").post(userLoginValidator(), validate, loginUser);
+router.route("/refresh-token").post(refreshAccessToken);
+
+router
+  .route("/forgot-password")
+  .post(userForgotPasswordValidator(), validate, forgotPasswordRequest);
+
+router
+  .route("/reset-password/:resetToken")
+  .post(
+    userResetForgottenPasswordValidator(),
+    validate,
+    resetForgottenPassword,
+  );
+
+router.route("/logout").post(verifyJWT, logoutUser);
+router
+  .route("/chage-password")
+  .post(
+    verifyJWT,
+    userChangeCurrentPasswordValidator(),
+    validate,
+    changeCurrentPassword,
+  );
+
+router
+  .route("resend-email-verification")
+  .post(verifyJWT, resendEmailVerification);
+
+export default router;
